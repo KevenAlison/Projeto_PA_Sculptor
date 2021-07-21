@@ -36,7 +36,7 @@ int main(){
 
     //Tronco
     Projeto.setColor(0, 0, 0, 1);
-    Projeto.putBox(10, 13, 7, 13, 1, 2);
+    Projeto.putBox(10, 13, 7, 13, 0, 1);
     Projeto.putBox(9, 10, 7, 13, 0, 2); //Lado esquerdo
     Projeto.putBox(8, 9, 12, 13, 0, 2);
     Projeto.putBox(7, 9, 10, 12, 0, 2);
@@ -53,15 +53,15 @@ int main(){
     Projeto.putBox(0, 1, 14, 15, 0, 2);
 
     Projeto.setColor(0.502, 0.502, 0.502, 1);
-    Projeto.putBox(10, 13, 8, 11, 0, 1);
-    Projeto.putBox(10, 11, 11, 12, 0, 1);
-    Projeto.putBox(12, 13, 11, 12, 0, 1);
+    Projeto.putBox(10, 13, 8, 11, 1, 2);
+    Projeto.putBox(10, 11, 11, 12, 1, 2);
+    Projeto.putBox(12, 13, 11, 12, 1, 2);
     Projeto.setColor(1, 1, 1, 1);
-    Projeto.putBox(10, 11, 12, 13, 0, 1);
-    Projeto.putBox(12, 13, 12, 13, 0, 1);
-    Projeto.putBox(11, 12, 11, 12, 0, 1);
+    Projeto.putBox(10, 11, 12, 13, 1, 2);
+    Projeto.putBox(12, 13, 12, 13, 1, 2);
+    Projeto.putBox(11, 12, 11, 12, 1, 2);
     Projeto.setColor(1, 0, 0, 1);
-    Projeto.putBox(11, 12, 12, 13, 0, 1);
+    Projeto.putBox(11, 12, 12, 13, 1, 2);
 
     Projeto.setColor(0, 0, 0, 1);
     Projeto.putBox(13, 15, 7, 13, 0, 2);  //Lado direito
@@ -76,21 +76,21 @@ int main(){
     Projeto.putEllipsoid(23, 36, 1, 17, 12, 3);
 
     Projeto.setColor(0, 0, 0, 1); //Olhos
-    Projeto.putBox(7, 9, 18, 20, 0, 1);
-    Projeto.putBox(14, 16, 18, 20, 0, 1);
+    Projeto.putBox(7, 9, 18, 20, 1, 2);
+    Projeto.putBox(14, 16, 18, 20, 1, 2);
     Projeto.setColor(0.4, 0.4, 0.4, 1); //Óculos
-    Projeto.putBox(5, 6, 17, 21, 0, 1); //Lado esquerdo
-    Projeto.putBox(6, 10, 16, 17, 0, 1);
-    Projeto.putBox(10, 11, 17, 21, 0, 1);
-    Projeto.putBox(6, 10, 21, 22, 0, 1);
-    Projeto.putBox(12, 13, 17, 21, 0, 1);
-    Projeto.putBox(13, 17, 16, 17, 0, 1); //Lado direito
-    Projeto.putBox(17, 18, 17, 21, 0, 1);
-    Projeto.putBox(13, 17, 21, 22, 0, 1);
-    Projeto.putBox(13, 17, 16, 17, 0, 1);
-    Projeto.putBox(11, 12, 19, 20, 0, 1); //Perninha do centro
-    Projeto.putBox(4, 5, 19, 20, 0, 1); //Perninha esquerda
-    Projeto.putBox(18, 19, 19, 20, 0, 1); // Perninha direita
+    Projeto.putBox(5, 6, 17, 21, 1, 2); //Lado esquerdo
+    Projeto.putBox(6, 10, 16, 17, 1, 2);
+    Projeto.putBox(10, 11, 17, 21, 1, 2);
+    Projeto.putBox(6, 10, 21, 22, 1, 2);
+    Projeto.putBox(12, 13, 17, 21, 1, 2);
+    Projeto.putBox(13, 17, 16, 17, 1, 2); //Lado direito
+    Projeto.putBox(17, 18, 17, 21, 1, 2);
+    Projeto.putBox(13, 17, 21, 22, 1, 2);
+    Projeto.putBox(13, 17, 16, 17, 1, 2);
+    Projeto.putBox(11, 12, 19, 20, 1, 2); //Perninha do centro
+    Projeto.putBox(4, 5, 19, 20, 1, 2); //Perninha esquerda
+    Projeto.putBox(18, 19, 19, 20, 1, 2); // Perninha direita
 
     //Cabelo
     Projeto.setColor(0, 0, 0, 1);
@@ -107,16 +107,16 @@ int main(){
     Projeto.cutBox(21, 22, 18, 19, 0, 2);
     Projeto.putBox(6, 18, 26, 27, 0, 2);
     Projeto.putBox(13, 15, 22, 23, 0, 2);
-    Projeto.putBox(3, 21, 18, 24, 1, 2);
+    Projeto.putBox(3, 21, 18, 24, 0, 1);
 
     Projeto.setColor(1, 0.7961, 0.4667, 1);
-    Projeto.putBox(6, 8, 22, 23, 0, 1);
-    Projeto.putBox(7, 8, 23, 24, 0, 1);
-    Projeto.putBox(14, 15, 22, 23, 0, 1);
+    Projeto.putBox(6, 8, 22, 23, 1, 2);
+    Projeto.putBox(7, 8, 23, 24, 1, 2);
+    Projeto.putBox(14, 15, 22, 23, 1, 2);
 
     //Pomo de ouro
     Projeto.setColor(0.9843, 0.9804, 0.1765, 1);
-    Projeto.putSphere(40, 20, 4, 4);
+    Projeto.putSphere(20, 10, 1, 1);
 
     Projeto.writeOFF((char*)"hp.off");
 
