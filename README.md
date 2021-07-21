@@ -1,4 +1,4 @@
-## Projeto da disciplina de Programação Avançada
+# Projeto da disciplina de Programação Avançada
 # Escultor 2D
 
 ### Componentes:
