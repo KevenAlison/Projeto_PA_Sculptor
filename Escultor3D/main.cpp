@@ -118,7 +118,7 @@ int main(){
     Projeto.setColor(0.9843, 0.9804, 0.1765, 1);
     Projeto.putSphere(20, 10, 1, 1);
 
-    Projeto.writeOFF((char*)"hp.off");
+    Projeto.writeOFF((char*)"harry.off");
 
     return 0;
 }
