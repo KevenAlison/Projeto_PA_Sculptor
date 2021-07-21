@@ -1,5 +1,5 @@
 # Projeto da disciplina de Programação Avançada
-# Escultor 2D
+# Escultor 3D
 
 ### Componentes:
 
