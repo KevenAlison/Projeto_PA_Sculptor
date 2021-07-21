@@ -5,9 +5,9 @@
 #include <math.h>
 using namespace std;
 Sculptor::Sculptor(int _nx, int _ny, int _nz){
-    nx = _nz;
+    nx = _nx;
     ny = _ny;
-    nz = _nx;
+    nz = _nz;
 
     v = new Voxel**[nx];
 
