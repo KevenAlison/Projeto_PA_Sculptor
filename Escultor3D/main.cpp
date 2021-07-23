@@ -73,7 +73,8 @@ int main(){
 
     //Rosto
     Projeto.setColor(1, 0.7961, 0.4667, 1);
-    Projeto.putEllipsoid(23, 36, 1, 17, 12, 3);
+    Projeto.putEllipsoid(12, 18, 0, 9, 6, 2);
+    Projeto.cutVoxel(12,18,2);
 
     Projeto.setColor(0, 0, 0, 1); //Olhos
     Projeto.putBox(7, 9, 18, 20, 1, 2);
