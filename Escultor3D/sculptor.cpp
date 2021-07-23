@@ -5,18 +5,19 @@
 #include <math.h>
 using namespace std;
 Sculptor::Sculptor(int _nx, int _ny, int _nz){
+    int x,y;
     nx = _nx;
     ny = _ny;
     nz = _nz;
 
     v = new Voxel**[nx];
 
-    for(int i=0; i<nx; i++){
-         v[i] = new Voxel*[nx*ny];
+    for(x=0; x<nx; x++){
+         v[x] = new Voxel*[nx*ny];
     }
-    for(int i=0; i<nx; i++){
-        for(int j=0; j<ny; j++){
-            v[i][j]= new Voxel[nz*ny*nx];
+    for(x=0; x<nx; x++){
+        for(y=0; y<ny; y++){
+            v[x][y]= new Voxel[nz*ny*nx];
         }
     }
 
@@ -101,8 +102,6 @@ void Sculptor::putSphere(int xc, int yc, int zc, int raio){
 
 void Sculptor::cutSphere(int xc, int yc, int zc, int raio){
     int x,y,z,dxs,dys,dzs;
-
-
     for(x=0; x<=nx; x++){
         for(y=0; y<=ny; y++){
             for(z=0; z<=nz; z++){
@@ -116,19 +115,14 @@ void Sculptor::cutSphere(int xc, int yc, int zc, int raio){
 
 }
 
-void Sculptor::putEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz){
-    double rx2 = rx/2.0, ry2 = ry/2.0, rz2 = rz/2.0;
-    double dist;
-
-    for(int i=0; i<nx; i++){
-        for(int j=0; j<ny; j++){
-            for(int k=0; k<nz; k++){
+void Sculptor::putEllipsoid(int xc, int yc, int zc, int rx, int ry, int rz){
+    int x,y,z;
+    for(x=0; x<=nx; x++){
+        for(y=0; y<=ny; y++){
+            for(z=0; z<=nz; z++){
                 //Equação da elipse
-                dist = (i-xcenter/2.0)*(i-xcenter/2.0) / (rx2*rx2) + (j-ycenter/2.0)*(j-ycenter/2.0) / (ry2*ry2) + (k-zcenter/2.0)*(k-zcenter/2.0) / (rz2*rz2);
-
-                //Condição para desenho da elipse (distância menor que 1)
-                if(dist <= 1.0){
-                    putVoxel(i,j,k);
+                if((pow((x-xc),2) / pow(rx,2) + pow((y-yc),2) / pow(ry,2) + pow((z-zc),2) / pow(rz,2)) <= 1.0){
+                    putVoxel(x,y,z);
                 }
             }
         }
@@ -136,102 +130,90 @@ void Sculptor::putEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int r
 
 }
 
-void Sculptor::cutEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz){
-    double rx2 = rx/2.0, ry2 = ry/2.0, rz2 = rz/2.0;
-    double dist;
-
-    for(int i=0; i<nx; i++){
-        for(int j=0; j<ny; j++){
-            for(int k=0; k<nz; k++){
+void Sculptor::cutEllipsoid(int xc, int yc, int zc, int rx, int ry, int rz){
+    int x,y,z;
+    for(x=0; x<=nx; x++){
+        for(y=0; y<=ny; y++){
+            for(z=0; z<=nz; z++){
                 //Equação da elipse
-                dist = (i-xcenter/2.0)*(i-xcenter/2.0) / (rx2*rx2) + (j-ycenter/2.0)*(j-ycenter/2.0) / (ry2*ry2) + (k-zcenter/2.0)*(k-zcenter/2.0) / (rz2*rz2);
-
-                //Condição para desenho da elipse (distância menor que 1)
-                if(dist <= 1.0){
-                    cutVoxel(i,j,k);
+                if((pow((x-xc),2) / pow(rx,2) + pow((y-yc),2) / pow(ry,2) + pow((z-zc),2) / pow(rz,2)) <= 1.0){
+                    cutVoxel(x,y,z);
                 }
             }
         }
     }
+
 }
 
 void Sculptor::writeOFF(const char *nome){
+    int Nvoxels=0, i,j,k,x,y,z;
     string str;
-    ofstream f_out;
-    f_out.open(nome);
+    ofstream fout;
 
+    fout.open(nome); //Abertura do fluxo de arquivo
 
-    if(! f_out.good())
-    {
-        cout << "Falha ao criar arquivo\n";
-    }
-    else
+    if(! fout.is_open()){
+        cout << "Falha na criação do arquivo\n";
+        exit(1);
+    }else
         cout << "Gerando Arquivo...\n";
 
 
-    int totalDeElementos = nx*ny*nz;
+    fout<<"OFF"<<endl; //Identifica o tipo do arquivo
 
-    for(int i = 0; i<nx; i++)
-    {
-        for(int j = 0; j<ny; j++)
-        {
-            for(int k = 0; k<nz; k++)
-            {
-                if(v[i][j][k].isOn == false)
-                {
-                    totalDeElementos--;
+    //Conta os voxels ativos
+        for(x=0;x<nx;x++){
+            for(y=0;y<ny;y++){
+                for(z=0;z<nz;z++){
+                    if(v[x][y][z].isOn){
+                        Nvoxels++;
+                    }
                 }
             }
         }
-    }
 
-    str += "OFF\n";
-    str += to_string(totalDeElementos*8) + " " + to_string(totalDeElementos*6) + " " + "0\n";
+    //Conta a quantidade de faces e vertices da projeção
+     int Nv=8*Nvoxels;
+     int Nf=6*Nvoxels;
 
-    for(int i = 0; i<nx; i++)
-    {
-        for(int j = 0; j<ny; j++)
-        {
-            for(int k = 0; k<nz; k++)
-            {
-                if(v[i][j][k].isOn == true)
-                {
-                    str += to_string(i-0.5) + " " + to_string(j+0.5) + " " + to_string(k-0.5) + "\n";
-                    str += to_string(i-0.5) + " " + to_string(j-0.5) + " " + to_string(k-0.5) + "\n";
-                    str += to_string(i+0.5) + " " + to_string(j-0.5) + " " + to_string(k-0.5) + "\n";
-                    str += to_string(i+0.5) + " " + to_string(j+0.5) + " " + to_string(k-0.5) + "\n";
-                    str += to_string(i-0.5) + " " + to_string(j+0.5) + " " + to_string(k+0.5) + "\n";
-                    str += to_string(i-0.5) + " " + to_string(j-0.5) + " " + to_string(k+0.5) + "\n";
-                    str += to_string(i+0.5) + " " + to_string(j-0.5) + " " + to_string(k+0.5) + "\n";
-                    str += to_string(i+0.5) + " " + to_string(j+0.5) + " " + to_string(k+0.5) + "\n";
+     fout<<Nv<<" "<<Nf<<" "<<0<<endl;
+
+     //Definição das cordenadas espaciais dos voxels ativos
+        for(x=0;x<nx;x++){
+            for(y=0;y<ny;y++){
+                for(z=0;z<nz;z++){
+                    if(v[x][y][z].isOn == true){
+                            fout<< x-0.5 <<" "<< y+0.5 <<" "<< z-0.5 <<endl;
+                            fout<< x-0.5 <<" "<< y-0.5 <<" "<< z-0.5 <<endl;
+                            fout<< x+0.5 <<" "<< y-0.5 <<" "<< z-0.5 <<endl;
+                            fout<< x+0.5 <<" "<< y+0.5 <<" "<< z-0.5 <<endl;
+                            fout<< x-0.5 <<" "<< y+0.5 <<" "<< z+0.5 <<endl;
+                            fout<< x-0.5 <<" "<< y-0.5 <<" "<< z+0.5 <<endl;
+                            fout<< x+0.5 <<" "<< y-0.5 <<" "<< z+0.5 <<endl;
+                            fout<< x+0.5 <<" "<< y+0.5 <<" "<< z+0.5 <<endl;
+                    }
                 }
             }
         }
-    }
 
-    int cont = 0;
-
-    for(int i = 0; i<nx; i++)
-    {
-        for(int j = 0; j<ny; j++)
-        {
-            for(int k = 0; k<nz; k++)
-            {
-                if(v[i][j][k].isOn == true)
-                {
-                    int pos = 8*cont;
-                    str += "4 " + to_string(pos) + " " + to_string(pos+3) + " " + to_string(pos+2) + " " + to_string(pos+1) + " " + to_string(v[i][j][k].r) + " " + to_string(v[i][j][k].g) + " " + to_string(v[i][j][k].b) + " " + to_string(v[i][j][k].a) + "\n";
-                    str += "4 " + to_string(pos+4) + " " + to_string(pos+5) + " " + to_string(pos+6) + " " + to_string(pos+7) + " " + to_string(v[i][j][k].r) + " " + to_string(v[i][j][k].g) + " " + to_string(v[i][j][k].b) + " " + to_string(v[i][j][k].a) + "\n";
-                    str += "4 " + to_string(pos) + " " + to_string(pos+1) + " " + to_string(pos+5) + " " + to_string(pos+4) + " " + to_string(v[i][j][k].r) + " " + to_string(v[i][j][k].g) + " " + to_string(v[i][j][k].b) + " " + to_string(v[i][j][k].a) + "\n";
-                    str += "4 " + to_string(pos) + " " + to_string(pos+4) + " " + to_string(pos+7) + " " + to_string(pos+3) + " " + to_string(v[i][j][k].r) + " " + to_string(v[i][j][k].g) + " " + to_string(v[i][j][k].b) + " " + to_string(v[i][j][k].a) + "\n";
-                    str +="4 " + to_string(pos+3) + " " + to_string(pos+7) + " " + to_string(pos+6) + " " + to_string(pos+2) + " " + to_string(v[i][j][k].r) + " " + to_string(v[i][j][k].g) + " " + to_string(v[i][j][k].b) + " " + to_string(v[i][j][k].a) + "\n";
-                    str += "4 " + to_string(pos+1) + " " + to_string(pos+2) + " " + to_string(pos+6) + " " + to_string(pos+5) + " " + to_string(v[i][j][k].r) + " " + to_string(v[i][j][k].g) + " " + to_string(v[i][j][k].b) + " " + to_string(v[i][j][k].a) + "\n";
-                    cont++;
+    int contador = 0;
+    fixed(fout);
+    for(x = 0; x<nx; x++){
+        for(y = 0; y<ny; y++){
+            for(z = 0; z<nz; z++){
+                if(v[x][y][z].isOn == true){
+                    int cord = 8*contador;
+                    fout << 4 <<" "<< cord+0 <<" "<< cord+3 <<" "<< cord+2 <<" "<< cord+1 <<" "<< v[x][y][z].r <<" " << v[x][y][z].g <<" "<< v[x][y][z].b <<" "<< v[x][y][z].a <<endl;
+                    fout << 4 <<" "<< cord+4 <<" "<< cord+5 <<" "<< cord+6 <<" "<< cord+7 <<" "<< v[x][y][z].r <<" " << v[x][y][z].g <<" "<< v[x][y][z].b <<" "<< v[x][y][z].a <<endl;
+                    fout << 4 <<" "<< cord+0 <<" "<< cord+1 <<" "<< cord+5 <<" "<< cord+4 <<" "<< v[x][y][z].r <<" " << v[x][y][z].g <<" "<< v[x][y][z].b <<" "<< v[x][y][z].a <<endl;
+                    fout << 4 <<" "<< cord+0 <<" "<< cord+4 <<" "<< cord+7 <<" "<< cord+3 <<" "<< v[x][y][z].r <<" " << v[x][y][z].g <<" "<< v[x][y][z].b <<" "<< v[x][y][z].a <<endl;
+                    fout << 4 <<" "<< cord+3 <<" "<< cord+7 <<" "<< cord+6 <<" "<< cord+2 <<" "<< v[x][y][z].r <<" " << v[x][y][z].g <<" "<< v[x][y][z].b <<" "<< v[x][y][z].a <<endl;
+                    fout << 4 <<" "<< cord+1 <<" "<< cord+2 <<" "<< cord+6 <<" "<< cord+5 <<" "<< v[x][y][z].r <<" " << v[x][y][z].g <<" "<< v[x][y][z].b <<" "<< v[x][y][z].a <<endl;
+                    contador++;
                 }
             }
         }
     }
     cout << "Arquivo gerado!! \n";
-    f_out << str;
-    f_out.close();
+    fout.close(); //Fecha fluxo de arquivo
 }
