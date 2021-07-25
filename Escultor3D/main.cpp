@@ -7,7 +7,8 @@
 using namespace std;
 
 int main(){
-    Sculptor Projeto(50,50,50);
+    int d=50;
+    Sculptor Projeto(d,d,d);
 
     //Pés
     Projeto.setColor(0.168, 0.233, 0.184, 1);
