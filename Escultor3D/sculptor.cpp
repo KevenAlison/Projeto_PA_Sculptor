@@ -4,6 +4,8 @@
 #include <string>
 #include <math.h>
 using namespace std;
+
+//Construtor com alocação de memória
 Sculptor::Sculptor(int _nx, int _ny, int _nz){
     int x,y;
     nx = _nx;
@@ -34,14 +36,18 @@ Sculptor::~Sculptor(){
 
 //fixa uma cor para o voxel
 void Sculptor::setColor(float red, float green, float blue, float opacidade){
-   r = red;
-   g = green;
-   b = blue;
-   a = opacidade;
+    r = red;
+    g = green;
+    b = blue;
+    a = opacidade;
 }
 
 //Ativa o voxel
 void Sculptor::putVoxel(int x, int y, int z){
+    if( (x>=nx || x<0)  ||  (y>=ny || y<0)  ||  (z>=nz || z<0) ){
+        cout << "Valores indicados ultrapassam os limites da matriz " << nx << " x " << ny << " x " << nz << endl;
+        exit(0);
+    }
     v[x][y][z].isOn = true;
     v[x][y][z].a = a;
     v[x][y][z].r = r;
@@ -51,7 +57,11 @@ void Sculptor::putVoxel(int x, int y, int z){
 
 //Desativa o voxel
 void Sculptor::cutVoxel(int x, int y, int z){
-v[x][y][z].isOn = false;
+    if( (x>=nx || x<0)  ||  (y>=ny || y<0)  ||  (z>=nz || z<0) ){
+        cout << "Valores indicados ultrapassam os limites da matriz " << nx << " x " << ny << " x " << nz << endl;
+        exit(0);
+    }
+    v[x][y][z].isOn = false;
 }
 
 //Ativa voxels entre um intervalo
@@ -69,6 +79,7 @@ void Sculptor::putBox(int xi, int xf, int yi, int yf, int zi, int zf){
 
 }
 
+//Desativa voxels entre um intervalo
 void Sculptor::cutBox(int xi, int xf, int yi, int yf, int zi, int zf){
     int cx, cy, cz; //coordenadas x,y,z
     for(cx=xi; cx<=xf; cx++){
@@ -83,10 +94,13 @@ void Sculptor::cutBox(int xi, int xf, int yi, int yf, int zi, int zf){
 
 }
 
+//Habilitar voxels dentro dos limites da esfera
 void Sculptor::putSphere(int xc, int yc, int zc, int raio){
     int x,y,z,dxs,dys,dzs;
-
-
+    if( ((xc+raio)>=nx || (xc+raio)<0)  ||  ((yc+raio)>=ny || (yc+raio)<0)  ||  ((zc+raio)>=nz || (zc+raio)<0)){
+        cout << "Valores indicados ultrapassam os limites da matriz " << nx << " x " << ny << " x " << nz << endl;
+        exit(0);
+    }
     for(x=0; x<=nx; x++){
         for(y=0; y<=ny; y++){
             for(z=0; z<=nz; z++){
@@ -100,7 +114,13 @@ void Sculptor::putSphere(int xc, int yc, int zc, int raio){
 
 }
 
+
+//Desabilitar voxels dentro dos limites da esfera
 void Sculptor::cutSphere(int xc, int yc, int zc, int raio){
+    if( ((xc+raio)>=nx || (xc+raio)<0)  ||  ((yc+raio)>=ny || (yc+raio)<0)  ||  ((zc+raio)>=nz || (zc+raio)<0)){
+        cout << "Valores indicados ultrapassam os limites da matriz " << nx << " x " << ny << " x " << nz << endl;
+        exit(0);
+    }
     int x,y,z,dxs,dys,dzs;
     for(x=0; x<=nx; x++){
         for(y=0; y<=ny; y++){
@@ -115,7 +135,12 @@ void Sculptor::cutSphere(int xc, int yc, int zc, int raio){
 
 }
 
+//Habilitar voxels dentro dos limites da elipsoide
 void Sculptor::putEllipsoid(int xc, int yc, int zc, int rx, int ry, int rz){
+    if( ((xc+rx)>=nx || (xc+rx)<0)  ||  ((yc+ry)>=ny || (yc+ry)<0)  ||  ((zc+rz)>=nz || (zc+rz)<0)){
+        cout << "Valores indicados ultrapassam os limites da matriz " << nx << " x " << ny << " x " << nz << endl;
+        exit(0);
+    }
     int x,y,z;
     for(x=0; x<=nx; x++){
         for(y=0; y<=ny; y++){
@@ -130,7 +155,12 @@ void Sculptor::putEllipsoid(int xc, int yc, int zc, int rx, int ry, int rz){
 
 }
 
+//Desabilitar voxels dentro dos limites da elipsoide
 void Sculptor::cutEllipsoid(int xc, int yc, int zc, int rx, int ry, int rz){
+    if( ((xc+rx)>=nx || (xc+rx)<0)  ||  ((yc+ry)>=ny || (yc+ry)<0)  ||  ((zc+rz)>=nz || (zc+rz)<0)){
+        cout << "Valores indicados ultrapassam os limites da matriz " << nx << " x " << ny << " x " << nz << endl;
+        exit(0);
+    }
     int x,y,z;
     for(x=0; x<=nx; x++){
         for(y=0; y<=ny; y++){
@@ -145,8 +175,9 @@ void Sculptor::cutEllipsoid(int xc, int yc, int zc, int rx, int ry, int rz){
 
 }
 
+//Gerar aquivo .OFF
 void Sculptor::writeOFF(const char *nome){
-    int Nvoxels=0, i,j,k,x,y,z;
+    int Nvoxels=0,x,y,z;
     string str;
     ofstream fout;
 
@@ -159,7 +190,7 @@ void Sculptor::writeOFF(const char *nome){
         cout << "Gerando Arquivo...\n";
 
 
-    fout<<"OFF"<<endl; //Identifica o tipo do arquivo
+    fout<<"OFF"<<endl; //Identificação do tipo de arquivo OFF
 
     //Conta os voxels ativos
         for(x=0;x<nx;x++){
@@ -196,6 +227,7 @@ void Sculptor::writeOFF(const char *nome){
             }
         }
 
+    //Definição das faces dos voxels a partir dos vertices
     int contador = 0;
     fixed(fout);
     for(x = 0; x<nx; x++){
