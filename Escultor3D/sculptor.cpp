@@ -29,8 +29,8 @@ Sculptor::Sculptor(int _nx, int _ny, int _nz){
 
 //Destrutor com liberação de memoria alocada
 Sculptor::~Sculptor(){
-    for (int x = 0; x < nx; x++){
-        for(int y = 0; y<ny; y++){
+    for (int x=0; x<nx; x++){
+        for(int y=0; y<ny; y++){
             delete[] v[x][y];
         }
     }
