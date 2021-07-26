@@ -1,20 +1,17 @@
 #ifndef SCULPTOR_H
 #define SCULPTOR_H
-#include <iostream>
 
 struct Voxel {
-  float r,g,b; // Colors
-  float a;
-// Transparency
-  bool isOn; // Included or not
+  float r,g,b; //Cores
+  float a; //Transparencia
+  bool isOn; // Voxel Ativado/Desativado
 };
 
 class Sculptor {
 protected:
-  Voxel ***v;
-  // 3D matrix
-  int nx,ny,nz; // Dimensions
-  float r,g,b,a; // Current drawing color
+  Voxel ***v; //Matriz 3d
+  int nx,ny,nz; // Dimensões
+  float r,g,b,a; // Propriedades atuais do voxel
 public:
   Sculptor(int _nx, int _ny, int _nz);
   ~Sculptor();
