@@ -29,8 +29,14 @@ Sculptor::Sculptor(int _nx, int _ny, int _nz){
 
 //Destrutor com liberação de memoria alocada
 Sculptor::~Sculptor(){
-    delete[] v[0][0];
-    delete[] v[0];
+    for (int x = 0; x < nx; x++){
+        for(int y = 0; y<ny; y++){
+            delete[] v[x][y];
+        }
+    }
+    for (int x=0; x<nx; x++){
+        delete[] v[x];
+    }
     delete[] v;
 }
 
@@ -178,7 +184,6 @@ void Sculptor::cutEllipsoid(int xc, int yc, int zc, int rx, int ry, int rz){
 //Gerar aquivo .OFF
 void Sculptor::writeOFF(const char *nome){
     int Nvoxels=0,x,y,z;
-    string str;
     ofstream fout;
 
     fout.open(nome); //Abertura do fluxo de arquivo
