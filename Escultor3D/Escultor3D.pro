@@ -9,6 +9,7 @@ SOURCES += \
         cutsphere.cpp \
         cutvoxel.cpp \
         figurageometrica.cpp \
+        leitor.cpp \
         main.cpp \
         putbox.cpp \
         putellipsoid.cpp \
@@ -22,6 +23,7 @@ HEADERS += \
     cutsphere.h \
     cutvoxel.h \
     figurageometrica.h \
+    leitor.h \
     putbox.h \
     putellipsoid.h \
     putsphere.h \
